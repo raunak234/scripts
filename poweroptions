@@ -8,8 +8,11 @@ then
 elif [ $choice == "2.poweroff" ]
 then
 	exec poweroff
-else
+elif [ $choice == "3.reboot" ]
+then
 	exec reboot
+else
+	echo " "
 fi
 
 

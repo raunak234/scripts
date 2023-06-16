@@ -3,7 +3,10 @@ selection=$(echo -e "Channel \n Video" | dmenu -p "search:")
 if [ $selection == "Channel" ]
 then
 	echo "" | dmenu -p "Search:"| xargs -I{} ytfzf -D --type=channel {}
-else
+elif [ $selection == "Video" ]
+then
 	echo "" | dmenu -p "Search:"| xargs -I{} ytfzf -D {}
+else
+	echo " "
 fi
 
