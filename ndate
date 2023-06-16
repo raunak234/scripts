@@ -1,0 +1,4 @@
+#!/bin/bash
+#curl -s https://english.hamropatro.com/ | grep 2080- | sed -n 1p | cut -d"/" -f3 | cut -d'"' -f1
+curl -s https://english.hamropatro.com/ | grep 2080- | sed -n 1p | cut -d"'" -f2 | cut -d"/" -f3
+#curl -s https://english.hamropatro.com/ | grep 2080- | sed -n 1p | cut -d" " -f4 | cut -d"'" -f2 | cut -d"/" -f3

@@ -1,0 +1,18 @@
+#!/bin/bash
+echo "Enter the link of album: "
+read link
+albumname=$(echo $link | cut -d"/" -f5 | cut -d"." -f1)
+printf $albumname
+mkdir $HOME/Music/"$albumname"
+curl -s $link | grep pagalnew.com/songs/ | cut -d '"' -f2 > /tmp/"$albumname".txt
+curl -s $(cat /tmp/"$albumname".txt) | grep /download320/ | cut -d'"' -f8 | sed -e 's#^#https://pagalnew.com#' > /tmp/$line.txt
+
+while read line
+do
+	aria2c -d "$HOME/Music" "$line"
+done < /tmp/$line.txt
+mv $HOME/Music/*.mp3 $HOME/Music/"$albumname"/
+notify-send "$albumname album Download Complete"
+
+rm /tmp/"$albumname".txt
+rm /tmp/$line.txt
