@@ -1,18 +1,30 @@
 #!/bin/bash
-echo "Enter the link of album: "
-read link
-albumname=$(echo $link | cut -d"/" -f5 | cut -d"." -f1)
-printf $albumname
-mkdir $HOME/Music/"$albumname"
-curl -s $link | grep pagalnew.com/songs/ | cut -d '"' -f2 > /tmp/"$albumname".txt
-curl -s $(cat /tmp/"$albumname".txt) | grep /download320/ | cut -d'"' -f8 | sed -e 's#^#https://pagalnew.com#' > /tmp/$line.txt
 
-while read line
-do
+choice=$(echo -e "Music\nAlbum" | dmenu -p "Download: ")
+if [ $choice == "Album" ]
+then
+	link=$(echo"" | dmenu -p "Enter Album link:")
+	albumname=$(echo $link | cut -d"/" -f5 | cut -d"." -f1)
+	mkdir $HOME/Music/"$albumname"
+	curl -s $link | grep pagalnew.com/songs/ | cut -d '"' -f2 > /tmp/"$albumname".txt
+	curl -s $(cat /tmp/"$albumname".txt) | grep /download320/ | cut -d'"' -f8 | sed -e 's#^#https://pagalnew.com#' > /tmp/$line.txt
+	while read line
+	do
+		aria2c -d "$HOME/Music/$albumname" "$line"
+	done < /tmp/$line.txt
+	cd $HOME/Music/$albumname
+	for file in *.mp3; do j=`echo $file | cut -d"3" -f1 | sed 's/.$//'`;j=$j".mp3";mv "$file" "$j"; done
+	notify-send "$albumname album Download Complete"
+	rm /tmp/"$albumname".txt
+	rm /tmp/$line.txt
+elif [ $choice == "Music" ] 
+then
+	link=$(echo"" | dmenu -p "Enter Music link:")
+	line=$(curl -s $link | grep /download320/ | cut -d'"' -f8 | sed -e 's#^#https://pagalnew.com#')
 	aria2c -d "$HOME/Music" "$line"
-done < /tmp/$line.txt
-mv $HOME/Music/*.mp3 $HOME/Music/"$albumname"/
-notify-send "$albumname album Download Complete"
+	notify-send "Music Download Complete"
+else
+	echo " "
+fi
 
-rm /tmp/"$albumname".txt
-rm /tmp/$line.txt
+
