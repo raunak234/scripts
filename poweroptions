@@ -1,0 +1,15 @@
+#!/bin/bash
+
+choice=$(echo -e "1.lock\n2.poweroff\n3.reboot" | dmenu -p "What do you want to do: " )
+
+if [ $choice == "1.lock" ] 
+then
+	exec slock
+elif [ $choice == "2.poweroff" ]
+then
+	exec poweroff
+else
+	exec reboot
+fi
+
+
